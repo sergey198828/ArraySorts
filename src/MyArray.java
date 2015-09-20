@@ -34,6 +34,12 @@ public class MyArray {
                 "values=" + Arrays.toString(values) +
                 '}';
     }
+    //Swap 2 elements
+    public void swap(int firstElementIndex, int secondElementIndex){
+        int temp = this.values[firstElementIndex];
+        this.values[firstElementIndex] = this.values[secondElementIndex];
+        this.values[secondElementIndex] = temp;
+    }
   //Merge sort methods
     //Merge function, both arrays MUST be sorted before run this function otherwise it wont work correctly
     private MyArray merge(MyArray array){
@@ -106,9 +112,7 @@ public class MyArray {
             maxIndex = right;
         //If node value not maximum then swap and call recursively
         if (maxIndex != nodeIndex) {
-            int temp = this.values[nodeIndex-1];
-            this.values[nodeIndex-1] = this.values[maxIndex-1];
-            this.values[maxIndex-1] = temp;
+            this.swap(nodeIndex-1,maxIndex-1);
             this.heapify(maxIndex-1, size);
         }
     }
@@ -123,10 +127,28 @@ public class MyArray {
         this.buildHeap();
         int size = this.length-1;
         while(size>0){
-            int temp = this.values[0];
-            this.values[0] = this.values[size];
-            this.values[size] = temp;
+            this.swap(0,size);
             this.heapify(0, size--);
         }
+    }
+  //Quick sort methods
+    //Sorting using quicksort algorithm
+    public void quickSort(int left,int right){
+    if(left>=right)
+        return;
+    int m = this.partition(left,right);
+    this.quickSort(left,m-1);
+    this.quickSort(m+1,right);
+    }
+    //Divide array into 2 parts <= last element and > last element, return index of separation
+    private int partition(int left, int right){
+    int lessThanLastIndex=left-1;
+    int greaterThanLastIndex;
+    for (greaterThanLastIndex=left;greaterThanLastIndex<=right;greaterThanLastIndex++)
+        if(this.values[greaterThanLastIndex]<=this.values[right]){
+            this.swap(greaterThanLastIndex,lessThanLastIndex+1);
+            lessThanLastIndex++;
+        }
+        return lessThanLastIndex;
     }
 }
